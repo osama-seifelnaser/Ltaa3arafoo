@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>لتعارفوا NFC</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap">
+<style>
+/* Layout: dark navy storefront. Sticky offers bar + nav, hero with product scene, two product cards with galleries and live order summary, how-it-works, FAQ. */
+:root{
+  --bg:#050d1f; --bg2:#081733; --surface:#0c2147; --surface2:#112b5c;
+  --line:rgba(120,170,255,.2); --fg:#eef4ff; --muted:#a9bbdf;
+  --blue:#2f8bff; --cyan:#5ad8ff; --hot:#c4163a; --gold:#ffc857; --wa:#25d366; --wa-ink:#04210f;
+  --display:"Cairo","IBM Plex Sans Arabic",system-ui,sans-serif;
+  --body:"IBM Plex Sans Arabic","Cairo",system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.7;margin:0;
+  background-image:radial-gradient(900px 500px at 50% -120px,rgba(47,139,255,.25),transparent 70%)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--hot);z-index:60}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+.ic{width:1.1em;height:1.1em;flex:none}
+.wrap{width:100%;max-width:1160px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+
+/* top */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50}
+.offers{background:var(--hot);color:#fff}
+.offers .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px 14px;padding-block:6px;font-size:13px;font-weight:700;line-height:1.4}
+.offers .ltd{background:var(--gold);color:#1a1200;border-radius:99px;padding:0 10px;font-size:12px;font-weight:700}
+.offers button{background:none;border:0;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:2px 4px;font-weight:700;font-size:13px;color:#fff;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.5)}
+.offers button:hover{text-decoration-color:#fff}
+.nav{background:rgba(5,13,31,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:12px;height:56px}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:900;font-size:22px;text-decoration:none;margin-inline-end:auto}
+.brand svg{width:26px;height:26px}
+.links{display:flex;gap:18px;font-size:14px;font-weight:500}
+.links a{text-decoration:none;color:var(--muted)}
+.links a:hover{color:#fff}
+.iconbtn{display:inline-flex;align-items:center;justify-content:center;height:38px;min-width:38px;padding:0 12px;border-radius:99px;border:1px solid var(--line);background:rgba(255,255,255,.05);text-decoration:none;font-weight:700;font-size:14px;cursor:pointer;gap:6px}
+.iconbtn:hover{background:rgba(255,255,255,.12)}
+.iconbtn.fb{background:#1877f2;border-color:#1877f2;color:#fff}
+.iconbtn.wa{background:var(--wa);border-color:var(--wa);color:var(--wa-ink)}
+@media (max-width:760px){.links{display:none}}
+
+/* hero */
+.hero{padding-block:36px 24px}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--cyan);font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(2.5rem,7vw,4.7rem);line-height:1.12;margin:10px 0 14px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--cyan)}
+.lead{font-size:18px;color:var(--muted);max-width:34em;margin:0 0 22px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border-radius:14px;font-weight:700;font-size:17px;text-decoration:none;border:0;cursor:pointer;transition:transform .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn.wa{background:var(--wa);color:var(--wa-ink);box-shadow:0 8px 28px rgba(37,211,102,.35)}
+.btn.fb{background:#1877f2;color:#fff}
+.btn .ic{width:1.3em;height:1.3em}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;padding:0;list-style:none}
+.pills li{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border:1px solid var(--line);border-radius:99px;font-size:14px;color:var(--muted);background:rgba(255,255,255,.04)}
+.pills .ic{color:var(--cyan)}
+.hero-art{border-radius:32px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5);border:1px solid var(--line);aspect-ratio:1}
+.hero-art svg,.stage svg{display:block;width:100%;height:100%}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr}.hero-art{max-width:520px;margin-inline:auto;width:100%}}
+
+/* sections */
+section{padding-block:48px;scroll-margin-top:100px}
+.sh{margin-bottom:26px;max-width:40em}
+h2{font-family:var(--display);font-weight:900;font-size:clamp(1.8rem,4.5vw,2.7rem);line-height:1.25;margin:0 0 8px;text-wrap:balance}
+.sh p{margin:0;color:var(--muted);font-size:17px}
+
+/* products */
+.prods{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+@media (max-width:900px){.prods{grid-template-columns:1fr}}
+.prod{background:var(--surface);border:1px solid var(--line);border-radius:28px;padding:14px;min-width:0}
+.gal{position:relative}
+.stage{aspect-ratio:1;border-radius:20px;overflow:hidden;touch-action:pan-y}
+.nav-b{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(5,13,31,.65);backdrop-filter:blur(6px);display:grid;place-items:center;cursor:pointer}
+.nav-b:hover{background:rgba(5,13,31,.9)}
+.nav-b.prev{inset-inline-start:10px}.nav-b.next{inset-inline-end:10px}
+.nav-b .ic{width:18px;height:18px}
+[dir=rtl] .nav-b .ic{transform:scaleX(-1)}
+.thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.th{padding:0;border:2px solid transparent;border-radius:12px;overflow:hidden;cursor:pointer;aspect-ratio:1;background:none;opacity:.65}
+.th svg{display:block;width:100%;height:100%}
+.th[aria-current=true]{border-color:var(--cyan);opacity:1}
+.sale{position:absolute;top:12px;inset-inline-start:12px;z-index:2;background:var(--gold);color:#1a1200;font-family:var(--display);font-weight:900;font-size:18px;padding:2px 14px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.pbody{padding:18px 8px 8px}
+.pbody h3{font-family:var(--display);font-weight:900;font-size:26px;margin:0 0 6px;line-height:1.3}
+.pbody p{margin:0 0 12px;color:var(--muted)}
+.ticks{list-style:none;padding:0;margin:0 0 16px;display:grid;gap:6px}
+.ticks li{display:flex;gap:8px;align-items:flex-start;font-size:15px}
+.ticks .ic{color:var(--cyan);margin-top:5px}
+.price{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.price .now{font-family:var(--display);font-weight:900;font-size:40px;line-height:1;font-variant-numeric:tabular-nums}
+.price .cur{font-weight:700;color:var(--muted)}
+.price s{color:var(--muted);font-size:20px;font-variant-numeric:tabular-nums;text-decoration-color:var(--hot);text-decoration-thickness:2px}
+fieldset{border:0;padding:0;margin:0 0 14px;min-width:0}
+legend{font-weight:700;font-size:14px;color:var(--muted);margin-bottom:8px;padding:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:6px;min-height:42px;padding:0 14px;border-radius:12px;border:1.5px solid var(--line);background:rgba(255,255,255,.04);cursor:pointer;font-weight:500;font-size:15px}
+.chip:hover{border-color:var(--blue)}
+.chip[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:700}
+.qty{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.step{display:inline-flex;align-items:center;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+.step button{width:44px;height:44px;border:0;background:rgba(255,255,255,.06);cursor:pointer;display:grid;place-items:center}
+.step button:hover{background:rgba(255,255,255,.14)}
+.step output{min-width:48px;text-align:center;font-weight:700;font-size:18px;font-variant-numeric:tabular-nums}
+.sum{background:var(--bg);border:1px dashed var(--line);border-radius:16px;padding:12px 14px;margin-bottom:14px;display:grid;gap:2px}
+.sum .r{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.sum .tot{font-family:var(--display);font-weight:900;font-size:28px;font-variant-numeric:tabular-nums}
+.sum .small{font-size:14px;color:var(--muted)}
+.sum .save{color:var(--gold);font-weight:700}
+.prod .btn{width:100%}
+.fine{font-size:13px;color:var(--muted);margin:10px 0 0;text-align:center}
+
+/* how */
+.how{background:var(--bg2);border-block:1px solid var(--line)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;list-style:none;padding:0;margin:0}
+@media (max-width:820px){.steps{grid-template-columns:1fr}}
+.steps li{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:20px;display:grid;gap:8px;justify-items:start}
+.steps .s-ic{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,var(--blue),#164fb5);display:grid;place-items:center}
+.steps .s-ic svg{width:36px;height:36px}
+.steps h3{margin:4px 0 0;font-family:var(--display);font-weight:900;font-size:21px}
+.steps p{margin:0;color:var(--muted);font-size:15px}
+.note{margin-top:18px;display:flex;gap:10px;align-items:center;color:var(--muted);font-size:15px}
+.note .ic{color:var(--cyan)}
+
+/* why */
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:820px){.feats{grid-template-columns:1fr}}
+.feat{padding:20px;border-radius:22px;border:1px solid var(--line);background:linear-gradient(160deg,var(--surface),var(--bg2))}
+.feat .ic{width:30px;height:30px;color:var(--cyan)}
+.feat h3{font-family:var(--display);font-weight:900;font-size:21px;margin:10px 0 4px}
+.feat p{margin:0;color:var(--muted);font-size:15px}
+.aud{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.aud span{padding:6px 16px;border-radius:99px;background:var(--surface2);font-weight:500;font-size:15px}
+
+/* faq */
+details{border:1px solid var(--line);background:var(--surface);border-radius:16px;margin-bottom:10px}
+summary{cursor:pointer;padding:16px 18px;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:24px;line-height:1;color:var(--cyan)}
+details[open] summary::after{content:"–"}
+details p{margin:0;padding:0 18px 16px;color:var(--muted)}
+.faq{max-width:760px}
+
+/* final cta */
+.final{text-align:center;padding-block:56px}
+.final .box{background:linear-gradient(135deg,#143d99,#0a2468 60%,#0b1d4d);border:1px solid var(--line);border-radius:32px;padding:40px 20px}
+.final .cta{justify-content:center}
+.final h2{margin-bottom:18px}
+footer{border-top:1px solid var(--line);padding-block:24px 96px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.float{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));inset-inline-end:max(16px,env(safe-area-inset-right,0px),env(safe-area-inset-left,0px));z-index:40;width:60px;height:60px;border-radius:50%;background:var(--wa);color:var(--wa-ink);display:grid;place-items:center;box-shadow:0 10px 30px rgba(0,0,0,.5);animation:ping 2.4s infinite}
+.float .ic{width:32px;height:32px}
+@keyframes ping{0%{box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 0 0 rgba(37,211,102,.55)}70%{box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 0 18px rgba(37,211,102,0)}100%{box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 0 0 rgba(37,211,102,0)}}
+.wv{animation:wave 2s infinite;transform-origin:center}
+.wv2{animation-delay:.3s}.wv3{animation-delay:.6s}
+@keyframes wave{0%,100%{opacity:.25}50%{opacity:1}}
+</style>
+
+</head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<radialGradient id="bgGrad" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="#1d56c9"/><stop offset=".5" stop-color="#0b2766"/><stop offset="1" stop-color="#050d1f"/></radialGradient>
+<linearGradient id="cardGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1b4fc4"/><stop offset=".5" stop-color="#0a2468"/><stop offset="1" stop-color="#061741"/></linearGradient>
+<linearGradient id="silver" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7f9ff"/><stop offset=".5" stop-color="#cfd9ee"/><stop offset="1" stop-color="#e9eefa"/></linearGradient>
+<linearGradient id="swirl" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#2f8bff" stop-opacity="0"/><stop offset=".45" stop-color="#2f8bff"/><stop offset="1" stop-color="#7eeaff"/></linearGradient>
+<linearGradient id="metalBlue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3eeff"/><stop offset=".35" stop-color="#6d9bea"/><stop offset=".6" stop-color="#f2f7ff"/><stop offset="1" stop-color="#4a78cc"/></linearGradient>
+<linearGradient id="metalPink" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe6f1"/><stop offset=".35" stop-color="#ef76ae"/><stop offset=".6" stop-color="#fff2f8"/><stop offset="1" stop-color="#cf4f8a"/></linearGradient>
+<linearGradient id="screen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#12306f"/><stop offset="1" stop-color="#061330"/></linearGradient>
+<linearGradient id="screenLight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6faff"/><stop offset="1" stop-color="#d6e6ff"/></linearGradient>
+<radialGradient id="keyLight" cx=".22" cy=".12" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<radialGradient id="vig" cx=".5" cy=".5" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".6"/></radialGradient>
+<linearGradient id="gloss" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".3"/><stop offset=".4" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".28"/></linearGradient>
+<radialGradient id="sheenR" cx=".3" cy=".25" r=".8"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></radialGradient>
+<linearGradient id="phoneEdge" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8fa4cf"/><stop offset=".5" stop-color="#27324f"/><stop offset="1" stop-color="#6b7fa9"/></linearGradient>
+<filter id="blurL" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16"/></filter>
+<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="4"/><feColorMatrix type="saturate" values="0"/></filter>
+<filter id="blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9"/></filter>
+<clipPath id="circ" clipPathUnits="objectBoundingBox"><circle cx=".5" cy=".5" r=".5"/></clipPath>
+</defs></svg>
+
+<header class="top">
+  <div class="offers"><div class="wrap">
+    <span class="ltd" data-i="limited"></span>
+    <button type="button" data-offer="friends"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/></svg><span data-i="offFriends"></span></button>
+    <button type="button" data-offer="student"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917z"/>
+  <path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466z"/></svg><span data-i="offStudents"></span></button>
+  </div></div>
+  <div class="nav"><div class="wrap">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#5ad8ff" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><path d="M6 8c2.2 2.6 2.2 5.4 0 8"/><path d="M10 5.5c3.6 3.8 3.6 9.2 0 13"/><path d="M14 3c5 5 5 13 0 18"/></svg>
+      <span data-i="brand"></span></a>
+    <nav class="links"><a href="#products" data-i="navProducts"></a><a href="#how" data-i="navHow"></a><a href="#faq" data-i="navFaq"></a></nav>
+    <a class="iconbtn fb" id="fbTop" target="_blank" rel="noopener" data-ial="fbLabel"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a>
+    <a class="iconbtn wa" id="waTop" target="_blank" rel="noopener" data-ial="waLabel"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/></svg></a>
+    <button class="iconbtn" id="langBtn" type="button" aria-label="Language"></button>
+  </div></div>
+</header>
+
+<main id="top">
+<section class="hero"><div class="wrap">
+  <div>
+    <span class="eyebrow"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/></svg><span data-i="eyebrow"></span></span>
+    <h1 data-i="h1"></h1>
+    <p class="lead" data-i="lead"></p>
+    <div class="cta">
+      <a class="btn wa" id="waHero" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/></svg><span data-i="orderNow"></span></a>
+      <a class="btn fb" id="fbHero" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg><span data-i="fbPage"></span></a>
+    </div>
+    <ul class="pills">
+      <li><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z"/></svg><span data-i="pill1"></span></li>
+      <li><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1 1 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4 4 0 0 1-.128-1.287z"/>
+  <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243z"/></svg><span data-i="pill2"></span></li>
+      <li><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3 2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm6 11a1 1 0 1 0-2 0 1 1 0 0 0 2 0"/></svg><span data-i="pill3"></span></li>
+    </ul>
+  </div>
+  <div class="hero-art" id="heroArt"></div>
+</div></section>
+
+<section id="products"><div class="wrap">
+  <div class="sh"><h2 data-i="prodTitle"></h2><p data-i="prodSub"></p></div>
+  <div class="prods">
+
+    <article class="prod" id="p-card">
+      <div class="gal" id="gal-card"><span class="sale" data-i="off50"></span>
+        <div class="stage"></div>
+        <button class="nav-b prev" type="button" data-ial="prev"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/></svg></button>
+        <button class="nav-b next" type="button" data-ial="next"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg></button>
+        <div class="thumbs"></div></div>
+      <div class="pbody">
+        <h3 data-i="cardName"></h3>
+        <p data-i="cardDesc"></p>
+        <ul class="ticks"><li><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/></svg><span data-i="cardT1"></span></li><li><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/></svg><span data-i="cardT2"></span></li><li><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/></svg><span data-i="cardT3"></span></li></ul>
+        <div class="price"><b class="now" id="now-card">250</b><span class="cur" data-i="cur"></span><s id="old-card">500</s></div>
+        <fieldset><legend data-i="optDeal"></legend>
+          <div class="chips" data-k="card" data-g="offer">
+            <button type="button" class="chip" data-v="none" aria-pressed="true"><span data-i="chipReg"></span></button>
+            <button type="button" class="chip" data-v="friends" aria-pressed="false"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/></svg><span data-i="chipFriends"></span></button>
+            <button type="button" class="chip" data-v="student" aria-pressed="false"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917z"/>
+  <path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466z"/></svg><span data-i="chipStudent"></span></button>
+          </div></fieldset>
+        <div class="qty"><span data-i="qty"></span>
+          <div class="step" data-k="card"><button type="button" data-d="-1" data-ial="minus"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8"/></svg></button><output id="q-card">1</output><button type="button" data-d="1" data-ial="plus"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/></svg></button></div></div>
+        <div class="sum" id="sum-card" aria-live="polite"></div>
+        <a class="btn wa" id="wa-card" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/></svg><span data-i="orderWa"></span></a>
+        <p class="fine" data-i="fine"></p>
+      </div>
+    </article>
+
+    <article class="prod" id="p-kids">
+      <div class="gal" id="gal-kids"><span class="sale" data-i="off60"></span>
+        <div class="stage"></div>
+        <button class="nav-b prev" type="button" data-ial="prev"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/></svg></button>
+        <button class="nav-b next" type="button" data-ial="next"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"/></svg></button>
+        <div class="thumbs"></div></div>
+      <div class="pbody">
+        <h3 data-i="kidsName"></h3>
+        <p data-i="kidsDesc"></p>
+        <ul class="ticks"><li><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/></svg><span data-i="kidsT1"></span></li><li><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/></svg><span data-i="kidsT2"></span></li><li><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/></svg><span data-i="kidsT3"></span></li></ul>
+        <div class="price"><b class="now" id="now-kids">400</b><span class="cur" data-i="cur"></span><s id="old-kids">1000</s></div>
+        <fieldset><legend data-i="optPic"></legend>
+          <div class="chips" data-k="kids" data-g="gender">
+            <button type="button" class="chip" data-v="boy" aria-pressed="true"><span data-i="boy"></span></button>
+            <button type="button" class="chip" data-v="girl" aria-pressed="false"><span data-i="girl"></span></button>
+          </div></fieldset>
+        <fieldset><legend data-i="optDeal"></legend>
+          <div class="chips" data-k="kids" data-g="offer">
+            <button type="button" class="chip" data-v="none" aria-pressed="true"><span data-i="chipReg"></span></button>
+            <button type="button" class="chip" data-v="friends" aria-pressed="false"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5.784 6A2.24 2.24 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/></svg><span data-i="chipFriends"></span></button>
+          </div></fieldset>
+        <div class="qty"><span data-i="qty"></span>
+          <div class="step" data-k="kids"><button type="button" data-d="-1" data-ial="minus"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8"/></svg></button><output id="q-kids">1</output><button type="button" data-d="1" data-ial="plus"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/></svg></button></div></div>
+        <div class="sum" id="sum-kids" aria-live="polite"></div>
+        <a class="btn wa" id="wa-kids" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/></svg><span data-i="orderWa"></span></a>
+        <p class="fine" data-i="fine"></p>
+      </div>
+    </article>
+
+  </div>
+</div></section>
+
+<section class="how" id="how"><div class="wrap">
+  <div class="sh"><h2 data-i="howTitle"></h2><p data-i="howSub"></p></div>
+  <ol class="steps">
+    <li><span class="s-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="17" rx="2.5"/><path d="M10.5 16h3"/><path d="M4 22c4-2 12-2 16 0"/></svg></span><h3 data-i="s1t"></h3><p data-i="s1p"></p></li>
+    <li><span class="s-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 8c2.2 2.6 2.2 5.4 0 8"/><path d="M10 5.5c3.6 3.8 3.6 9.2 0 13"/><path d="M14 3c5 5 5 13 0 18"/></svg></span><h3 data-i="s2t"></h3><p data-i="s2p"></p></li>
+    <li><span class="s-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 11V5a2 2 0 0 1 4 0v5l5 1.2a2 2 0 0 1 1.5 2.3L17.3 19a3 3 0 0 1-3 2.2H11a3 3 0 0 1-2.3-1L5 15.5"/></svg></span><h3 data-i="s3t"></h3><p data-i="s3p"></p></li>
+  </ol>
+  <p class="note"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M3 2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm6 11a1 1 0 1 0-2 0 1 1 0 0 0 2 0"/></svg><span data-i="phones"></span></p>
+</div></section>
+
+<section id="why"><div class="wrap">
+  <div class="sh"><h2 data-i="whyTitle"></h2></div>
+  <div class="feats">
+    <div class="feat"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1 1 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4 4 0 0 1-.128-1.287z"/>
+  <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243z"/></svg><h3 data-i="f1t"></h3><p data-i="f1p"></p></div>
+    <div class="feat"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z"/></svg><h3 data-i="f2t"></h3><p data-i="f2p"></p></div>
+    <div class="feat"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .101.025 1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56"/>
+  <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0"/></svg><h3 data-i="f3t"></h3><p data-i="f3p"></p></div>
+  </div>
+  <div class="aud" id="aud"></div>
+</div></section>
+
+<section id="faq"><div class="wrap faq">
+  <div class="sh"><h2 data-i="faqTitle"></h2></div>
+  <details><summary data-i="q1"></summary><p data-i="a1"></p></details>
+  <details><summary data-i="q2"></summary><p data-i="a2"></p></details>
+  <details><summary data-i="q3"></summary><p data-i="a3"></p></details>
+  <details><summary data-i="q4"></summary><p data-i="a4"></p></details>
+</div></section>
+
+<section class="final"><div class="wrap"><div class="box">
+  <h2 data-i="finalT"></h2>
+  <div class="cta">
+    <a class="btn wa" id="waFinal" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/></svg><span data-i="orderNow"></span></a>
+    <a class="btn fb" id="fbFinal" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg><span data-i="fbPage"></span></a>
+  </div>
+</div></div></section>
+</main>
+
+<footer><div class="wrap">
+  <span><b data-i="brand"></b> · <span data-i="foot"></span></span>
+  <span style="display:flex;gap:8px"><a class="iconbtn fb" id="fbFoot" target="_blank" rel="noopener" data-ial="fbLabel"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951"/></svg></a><a class="iconbtn wa" id="waFoot" target="_blank" rel="noopener" data-ial="waLabel"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/></svg></a></span>
+</div></footer>
+
+<a class="float" id="waFloat" target="_blank" rel="noopener" data-ial="waLabel"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"/></svg></a>
+
+<script>
+/* ======= الإعدادات: ضع رقم واتساب هنا بالصيغة الدولية بدون + (مثال: 201012345678) ======= */
+const WA_NUMBER = "201559917698";
+const FB_URL = "https://www.facebook.com/profile.php?id=61595436495230";
+/* =========================================================================================== */
+const ICO={"whatsapp": "<path d=\"M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232\"/>", "facebook": "<path d=\"M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951\"/>", "credit-card-2-front-fill": "<path d=\"M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2.5 1a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm0 3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm3 0a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z\"/>", "wallet2": "<path d=\"M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5z\"/>", "cup-hot-fill": "<path fill-rule=\"evenodd\" d=\"M.5 6a.5.5 0 0 0-.488.608l1.652 7.434A2.5 2.5 0 0 0 4.104 16h5.792a2.5 2.5 0 0 0 2.44-1.958l.131-.59a3 3 0 0 0 1.3-5.854l.221-.99A.5.5 0 0 0 13.5 6zM13 12.5a2 2 0 0 1-.316-.025l.867-3.898A2.001 2.001 0 0 1 13 12.5\"/>\n  <path d=\"m4.4.8-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 3.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 3.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 3 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 4.4.8m3 0-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 6.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 6.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 6 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 7.4.8m3 0-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.252.382l-.019.025-.005.008-.002.002A.5.5 0 0 1 9.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 9.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 9 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 10.4.8\"/>", "globe2": "<path d=\"M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855q-.215.403-.395.872c.705.157 1.472.257 2.282.287zM4.249 3.539q.214-.577.481-1.078a7 7 0 0 1 .597-.933A7 7 0 0 0 3.051 3.05q.544.277 1.198.49zM3.509 7.5c.036-1.07.188-2.087.436-3.008a9 9 0 0 1-1.565-.667A6.96 6.96 0 0 0 1.018 7.5zm1.4-2.741a12.3 12.3 0 0 0-.4 2.741H7.5V5.091c-.91-.03-1.783-.145-2.591-.332M8.5 5.09V7.5h2.99a12.3 12.3 0 0 0-.399-2.741c-.808.187-1.681.301-2.591.332zM4.51 8.5c.035.987.176 1.914.399 2.741A13.6 13.6 0 0 1 7.5 10.91V8.5zm3.99 0v2.409c.91.03 1.783.145 2.591.332.223-.827.364-1.754.4-2.741zm-3.282 3.696q.18.469.395.872c.552 1.035 1.218 1.65 1.887 1.855V11.91c-.81.03-1.577.13-2.282.287zm.11 2.276a7 7 0 0 1-.598-.933 9 9 0 0 1-.481-1.079 8.4 8.4 0 0 0-1.198.49 7 7 0 0 0 2.276 1.522zm-1.383-2.964A13.4 13.4 0 0 1 3.508 8.5h-2.49a6.96 6.96 0 0 0 1.362 3.675c.47-.258.995-.482 1.565-.667m6.728 2.964a7 7 0 0 0 2.275-1.521 8.4 8.4 0 0 0-1.197-.49 9 9 0 0 1-.481 1.078 7 7 0 0 1-.597.933M8.5 11.909v3.014c.67-.204 1.335-.82 1.887-1.855q.216-.403.395-.872A12.6 12.6 0 0 0 8.5 11.91zm3.555-.401c.57.185 1.095.409 1.565.667A6.96 6.96 0 0 0 14.982 8.5h-2.49a13.4 13.4 0 0 1-.437 3.008M14.982 7.5a6.96 6.96 0 0 0-1.362-3.675c-.47.258-.995.482-1.565.667.248.92.4 1.938.437 3.008zM11.27 2.461q.266.502.482 1.078a8.4 8.4 0 0 0 1.196-.49 7 7 0 0 0-2.275-1.52c.218.283.418.597.597.932m-.488 1.343a8 8 0 0 0-.395-.872C9.835 1.897 9.17 1.282 8.5 1.077V4.09c.81-.03 1.577-.13 2.282-.287z\"/>", "linkedin": "<path d=\"M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z\"/>", "envelope-fill": "<path d=\"M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414zM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586zm3.436-.586L16 11.801V4.697z\"/>", "telephone-fill": "<path fill-rule=\"evenodd\" d=\"M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z\"/>", "chat-dots-fill": "<path d=\"M16 8c0 3.866-3.582 7-8 7a9 9 0 0 1-2.347-.306c-.584.296-1.925.864-4.181 1.234-.2.032-.352-.176-.273-.362.354-.836.674-1.95.77-2.966C.744 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7M5 8a1 1 0 1 0-2 0 1 1 0 0 0 2 0m4 0a1 1 0 1 0-2 0 1 1 0 0 0 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2\"/>"};
+const AV={"boy": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2RjZWJmZiIvPgogIDxjaXJjbGUgY3g9IjMwIiBjeT0iNDAiIHI9IjMiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii44Ii8+CiAgPGNpcmNsZSBjeD0iMTcwIiBjeT0iNjAiIHI9IjQiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii44Ii8+CiAgPGNpcmNsZSBjeD0iMTYwIiBjeT0iMzAiIHI9IjIuNSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjgiLz4KICA8IS0tIG5lY2sgLS0+CiAgPHJlY3QgeD0iODciIHk9IjEyMiIgd2lkdGg9IjI2IiBoZWlnaHQ9IjM0IiByeD0iOSIgZmlsbD0iI2YyYjk4ZiIvPgogIDwhLS0gaG9vZGllIC0tPgogIDxwYXRoIGQ9Ik0yNiAyMDAgQzI2IDE2NCA1OCAxNDggMTAwIDE0OCBDMTQyIDE0OCAxNzQgMTY0IDE3NCAyMDAgWiIgZmlsbD0iIzJmNmZlZCIvPgogIDxwYXRoIGQ9Ik03MCAxNTAgUTEwMCAxNzYgMTMwIDE1MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMWU0ZmMyIiBzdHJva2Utd2lkdGg9IjciIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik05NiAxNjggTDk2IDE4NiBNMTA0IDE2OCBMMTA0IDE4NiIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDwhLS0gZWFycyAtLT4KICA8Y2lyY2xlIGN4PSI1NCIgY3k9Ijk4IiByPSI5IiBmaWxsPSIjZjJiOThmIi8+CiAgPGNpcmNsZSBjeD0iMTQ2IiBjeT0iOTgiIHI9IjkiIGZpbGw9IiNmMmI5OGYiLz4KICA8IS0tIGhlYWQgLS0+CiAgPGNpcmNsZSBjeD0iMTAwIiBjeT0iOTIiIHI9IjQ3IiBmaWxsPSIjZjhjZGE4Ii8+CiAgPCEtLSBoYWlyIC0tPgogIDxwYXRoIGQ9Ik01MyA5MCBDNDggNDYgODAgMzQgMTA0IDM2IEMxMzQgMzggMTUyIDU4IDE0NyA5MCBDMTQwIDcyIDEyMiA2NCAxMDIgNjYgQzg0IDY2IDY2IDc0IDUzIDkwIFoiIGZpbGw9IiM1YTM4MjUiLz4KICA8cGF0aCBkPSJNOTYgNDQgQzEwNiA0MCAxMjAgNDQgMTI2IDUyIiBmaWxsPSJub25lIiBzdHJva2U9IiM3YTRmMzYiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIuNyIvPgogIDwhLS0gZXllYnJvd3MgLS0+CiAgPHBhdGggZD0iTTcyIDg2IFE4MSA4MCA5MCA4NSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNWEzODI1IiBzdHJva2Utd2lkdGg9IjMuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHBhdGggZD0iTTExMCA4NSBRMTE5IDgwIDEyOCA4NiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNWEzODI1IiBzdHJva2Utd2lkdGg9IjMuMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPCEtLSBleWVzIC0tPgogIDxlbGxpcHNlIGN4PSI4MSIgY3k9Ijk5IiByeD0iNiIgcnk9IjgiIGZpbGw9IiMyYjJiMmIiLz4KICA8ZWxsaXBzZSBjeD0iMTE5IiBjeT0iOTkiIHJ4PSI2IiByeT0iOCIgZmlsbD0iIzJiMmIyYiIvPgogIDxjaXJjbGUgY3g9IjgzLjUiIGN5PSI5NS41IiByPSIyLjQiIGZpbGw9IiNmZmYiLz4KICA8Y2lyY2xlIGN4PSIxMjEuNSIgY3k9Ijk1LjUiIHI9IjIuNCIgZmlsbD0iI2ZmZiIvPgogIDwhLS0gY2hlZWtzIC0tPgogIDxjaXJjbGUgY3g9IjY4IiBjeT0iMTE1IiByPSI4IiBmaWxsPSIjZmY5YWEyIiBvcGFjaXR5PSIuNDUiLz4KICA8Y2lyY2xlIGN4PSIxMzIiIGN5PSIxMTUiIHI9IjgiIGZpbGw9IiNmZjlhYTIiIG9wYWNpdHk9Ii40NSIvPgogIDwhLS0gbm9zZSArIHNtaWxlIC0tPgogIDxwYXRoIGQ9Ik05NyAxMDggUTEwMCAxMTIgMTAzIDEwOCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBhMDdhIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHBhdGggZD0iTTg1IDExOCBRMTAwIDEzNCAxMTUgMTE4IFExMDAgMTI0IDg1IDExOCBaIiBmaWxsPSIjYTg0NzNhIiBzdHJva2U9IiNhODQ3M2EiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K", "girl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgMjAwIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iI2ZmZTBlZSIvPgogIDxjaXJjbGUgY3g9IjI4IiBjeT0iNTAiIHI9IjMiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii45Ii8+CiAgPGNpcmNsZSBjeD0iMTcyIiBjeT0iNDQiIHI9IjQiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii45Ii8+CiAgPGNpcmNsZSBjeD0iMTY2IiBjeT0iNzIiIHI9IjIuNSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjkiLz4KICA8IS0tIGJhY2sgaGFpciAtLT4KICA8cGF0aCBkPSJNNDYgOTggQzM2IDQwIDc2IDI0IDEwMCAyNCBDMTI2IDI0IDE2NCA0MCAxNTQgMTAwIEMxNTQgMTI4IDE2MCAxNTIgMTUyIDE3MiBMNDggMTcyIEM0MCAxNTIgNDYgMTI4IDQ2IDk4IFoiIGZpbGw9IiM2YjNmMmEiLz4KICA8IS0tIG5lY2sgLS0+CiAgPHJlY3QgeD0iODciIHk9IjEyMiIgd2lkdGg9IjI2IiBoZWlnaHQ9IjM0IiByeD0iOSIgZmlsbD0iI2YyYjk4ZiIvPgogIDwhLS0gdG9wIC0tPgogIDxwYXRoIGQ9Ik0yNiAyMDAgQzI2IDE2NCA1OCAxNTAgMTAwIDE1MCBDMTQyIDE1MCAxNzQgMTY0IDE3NCAyMDAgWiIgZmlsbD0iI2YwNmJhOCIvPgogIDxwYXRoIGQ9Ik03MiAxNTIgUTEwMCAxNzQgMTI4IDE1MiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZDk0ZThlIiBzdHJva2Utd2lkdGg9IjciIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxjaXJjbGUgY3g9IjEwMCIgY3k9IjE4NCIgcj0iNSIgZmlsbD0iI2ZmZDZlOCIvPgogIDwhLS0gZWFycyAtLT4KICA8Y2lyY2xlIGN4PSI1NCIgY3k9Ijk4IiByPSI4IiBmaWxsPSIjZjJiOThmIi8+CiAgPGNpcmNsZSBjeD0iMTQ2IiBjeT0iOTgiIHI9IjgiIGZpbGw9IiNmMmI5OGYiLz4KICA8IS0tIGhlYWQgLS0+CiAgPGNpcmNsZSBjeD0iMTAwIiBjeT0iOTQiIHI9IjQ2IiBmaWxsPSIjZjhjZGE4Ii8+CiAgPCEtLSBmcmluZ2UgLS0+CiAgPHBhdGggZD0iTTU0IDkyIEM1NiA1MCA4NCA0MiAxMDQgNDQgQzEzMiA0NiAxNDggNjIgMTQ2IDkyIEMxMzQgNzYgMTE2IDcyIDEwMiA2MCBDOTAgNzQgNzAgODAgNTQgOTIgWiIgZmlsbD0iIzZiM2YyYSIvPgogIDxwYXRoIGQ9Ik0xMTAgNTAgQzEyMiA1MiAxMzIgNTggMTM4IDY2IiBmaWxsPSJub25lIiBzdHJva2U9IiM4YTVhNDAiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIuNyIvPgogIDwhLS0gYm93IC0tPgogIDxwYXRoIGQ9Ik01NCA0MCBMNzYgNTIgTDU0IDY2IFoiIGZpbGw9IiNmZjVmYTIiLz4KICA8cGF0aCBkPSJNOTggNDAgTDc2IDUyIEw5OCA2NiBaIiBmaWxsPSIjZmY1ZmEyIi8+CiAgPGNpcmNsZSBjeD0iNzYiIGN5PSI1MyIgcj0iNyIgZmlsbD0iI2UwNDA4YSIvPgogIDwhLS0gZXllYnJvd3MgLS0+CiAgPHBhdGggZD0iTTcyIDg4IFE4MSA4MyA5MCA4NyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNmIzZjJhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik0xMTAgODcgUTExOSA4MyAxMjggODgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzZiM2YyYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KICA8IS0tIGV5ZXMgKyBsYXNoZXMgLS0+CiAgPGVsbGlwc2UgY3g9IjgxIiBjeT0iMTAxIiByeD0iNiIgcnk9IjgiIGZpbGw9IiMyYjJiMmIiLz4KICA8ZWxsaXBzZSBjeD0iMTE5IiBjeT0iMTAxIiByeD0iNiIgcnk9IjgiIGZpbGw9IiMyYjJiMmIiLz4KICA8Y2lyY2xlIGN4PSI4My41IiBjeT0iOTcuNSIgcj0iMi40IiBmaWxsPSIjZmZmIi8+CiAgPGNpcmNsZSBjeD0iMTIxLjUiIGN5PSI5Ny41IiByPSIyLjQiIGZpbGw9IiNmZmYiLz4KICA8cGF0aCBkPSJNNzMgOTYgTDY5IDkyIE03NSA5MyBMNzMgODgiIHN0cm9rZT0iIzJiMmIyYiIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik0xMjcgOTYgTDEzMSA5MiBNMTI1IDkzIEwxMjcgODgiIHN0cm9rZT0iIzJiMmIyYiIgc3Ryb2tlLXdpZHRoPSIyLjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDwhLS0gY2hlZWtzIC0tPgogIDxjaXJjbGUgY3g9IjY4IiBjeT0iMTE3IiByPSI4IiBmaWxsPSIjZmY4ZmIwIiBvcGFjaXR5PSIuNSIvPgogIDxjaXJjbGUgY3g9IjEzMiIgY3k9IjExNyIgcj0iOCIgZmlsbD0iI2ZmOGZiMCIgb3BhY2l0eT0iLjUiLz4KICA8IS0tIG5vc2UgKyBzbWlsZSAtLT4KICA8cGF0aCBkPSJNOTcgMTEwIFExMDAgMTE0IDEwMyAxMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwYTA3YSIgc3Ryb2tlLXdpZHRoPSIyLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik04NiAxMjAgUTEwMCAxMzUgMTE0IDEyMCBRMTAwIDEyNiA4NiAxMjAgWiIgZmlsbD0iI2MyNDU1ZiIgc3Ryb2tlPSIjYzI0NTVmIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+Cg=="};
+const PRICE={card:{p:250,old:500},kids:{p:400,old:1000}};
+const STUDENT=200;
+
+const D={
+ar:{
+ brand:"لتعارفوا", limited:"لفترة محدودة", offFriends:"عرض الصحاب: 3 بسعر 2", offStudents:"عرض الطلاب: 200 ج.م بدل 250",
+ navProducts:"المنتجات", navHow:"طريقة الاستخدام", navFaq:"أسئلة", fbLabel:"صفحتنا على فيسبوك", waLabel:"تواصل معنا على واتساب",
+ eyebrow:"كروت وميداليات NFC", h1:"خليك معروف<br><em>بلمسة</em>",
+ lead:"كارت NFC بيفتح كل روابطك لما حد يقرّب موبايله منه: فيسبوك، دفع إنستاباي، فودافون كاش، المنيو، موقعك، لينكدإن وجيميل. ومعاه ميدالية الأطفال اللي بتطمّن أهلهم.",
+ orderNow:"اطلب الآن", fbPage:"صفحتنا على فيسبوك", pill1:"بدون تطبيق", pill2:"أي رابط تحبه", pill3:"آيفون وأندرويد",
+ prodTitle:"اختار منتجك", prodSub:"اتفرج على الصور من كل زاوية وشوف بيتستخدم إزاي، وبعدها اطلب على واتساب.",
+ off50:"خصم 50%", off60:"خصم 60%", cur:"ج.م",
+ cardName:"كارت NFC", cardDesc:"كارت أنيق بوجه «لتعارفوا»، وكل روابطك جواه. أي موبايل يقرّب منه يفتحلك اللي تحبه في ثانية.",
+ cardT1:"فيسبوك، دفع إنستاباي، فودافون كاش", cardT2:"منيو أو موقع أو مدونة أو لينكدإن أو جيميل", cardT3:"للمهندس والدكتور وصاحب الشركة والمحل والطالب",
+ kidsName:"ميدالية الأطفال NFC", kidsDesc:"ميدالية بصورة كرتونية لولد أو بنت. أي حد يقرّب موبايله منها تفتحله صفحة الطفل وفيها رقم ولي الأمر.",
+ kidsT1:"صورة ولد أو بنت حسب اختيارك", kidsT2:"اتصال وواتساب ورسالة بضغطة واحدة", kidsT3:"في أمان… دائمًا على تواصل",
+ optDeal:"اختار العرض", chipReg:"سعر عادي", chipFriends:"عرض الصحاب 3 بسعر 2", chipStudent:"عرض الطلاب 200 ج.م",
+ optPic:"الصورة", boy:"ولد", girl:"بنت", qty:"العدد",
+ total:"الإجمالي", save:"وفّرت", payNote:"تدفع {n} بس", piecesNote:"{q} قطع",
+ orderWa:"اطلب عبر واتساب", fine:"هيفتح واتساب برسالة جاهزة. مش بنطلب منك أي بيانات هنا.",
+ howTitle:"تستخدمه إزاي؟", howSub:"ثلاث خطوات بس، ومن غير أي تطبيق.",
+ s1t:"قرّب الموبايل", s1p:"قرّب ضهر الموبايل من الكارت أو الميدالية.",
+ s2t:"الصفحة تفتح لوحدها", s2p:"من غير تسجيل ولا تحميل. الرابط بيفتح في ثانية.",
+ s3t:"اضغط على اللي تحتاجه", s3p:"فيسبوك، دفع، منيو، موقع، اتصال أو واتساب، كله في صفحة واحدة.",
+ phones:"بيشتغل مع آيفون XS وأحدث، وأندرويد اللي فيه NFC (فعّله من الإعدادات).",
+ whyTitle:"ليه لتعارفوا؟",
+ f1t:"أي رابط تحبه", f1p:"صفحتك على فيسبوك، رابط دفع إنستاباي، رقم فودافون كاش، منيو المطعم، موقعك أو مدونتك.",
+ f2t:"من غير ورق بيضيع", f2p:"كارت واحد بدل كروت ورقية. اللي يقرّب منه يوصل لكل بياناتك.",
+ f3t:"تطمّن على طفلك", f3p:"ميدالية بصورة الطفل، ولو احتاج حد يوصلك يقرّب موبايله ويتصل بيك.",
+ aud:["مهندسين","دكاترة","أصحاب شركات","أصحاب محلات ومطاعم","طلاب","أولياء أمور"],
+ faqTitle:"أسئلة شائعة",
+ q1:"محتاج تطبيق؟", a1:"لا. أغلب الموبايلات الحديثة تفتح الرابط بمجرد التقريب.",
+ q2:"بتشتغل مع أنهي موبايل؟", a2:"آيفون XS وأحدث، وأندرويد اللي فيه NFC. على أندرويد فعّل NFC من الإعدادات.",
+ q3:"أقدر أحط أي رابط؟", a3:"أيوه. فيسبوك، دفع إنستاباي، فودافون كاش، منيو، موقع، مدونة، لينكدإن، جيميل وغيرها.",
+ q4:"أطلب إزاي؟", a4:"اختار المنتج والعرض واضغط «اطلب عبر واتساب». الطلب بيوصلنا على واتساب ونكمل معاك التفاصيل هناك.",
+ finalT:"جاهز تبقى معروف بلمسة؟", foot:"كروت وميداليات NFC",
+ prev:"السابق", next:"التالي", minus:"إنقاص", plus:"زيادة", langBtn:"EN", langAria:"English",
+ hello:"مرحبًا لتعارفوا، عايز أستفسر عن الكروت والميداليات.",
+ m_hi:"مرحبًا لتعارفوا 👋\nعايز أطلب:", m_prod:"المنتج", m_qty:"العدد", m_deal:"العرض", m_total:"الإجمالي", m_pic:"الصورة",
+ m_card:"كارت NFC", m_kids:"ميدالية الأطفال NFC", m_none:"سعر عادي", m_friends:"عرض الصحاب (3 بسعر 2)", m_student:"عرض الطلاب (200 ج.م للكارت)",
+ alt:{cardFront:"وجه كارت لتعارفوا", cardBack:"ضهر الكارت وعليه علامة NFC", cardTap:"تقريب الموبايل من الكارت", cardLinks:"صفحة الروابط على الموبايل",
+      kidBoy:"ميدالية الولد", kidGirl:"ميدالية البنت", kidTap:"تقريب الموبايل من الميدالية", kidPage:"صفحة الطفل على الموبايل", hero:"كارت وميداليات لتعارفوا"},
+ sv:{name:"م. أحمد سيف", job:"مهندس استشاري", fb:"Facebook", pay:"دفع إنستاباي", vc:"فودافون كاش", menu:"المنيو", li:"LinkedIn", web:"موقعي",
+     kid1:"محمد", kid2:"مريم", safe:"في أمان… دائمًا على تواصل", call:"اتصال", wa:"واتساب", sms:"رسالة"}
+},
+en:{
+ brand:"Lta3arafo", limited:"Limited time", offFriends:"Friends deal: 3 for the price of 2", offStudents:"Students: EGP 200 instead of 250",
+ navProducts:"Products", navHow:"How it works", navFaq:"FAQ", fbLabel:"Our Facebook page", waLabel:"Chat with us on WhatsApp",
+ eyebrow:"NFC cards & medallions", h1:"Get known<br>with <em>one tap</em>",
+ lead:"An NFC card that opens all your links when someone holds a phone near it: Facebook, InstaPay payment, Vodafone Cash, your menu, website, LinkedIn and Gmail. Plus kids' medallions that put parents at ease.",
+ orderNow:"Order now", fbPage:"Our Facebook page", pill1:"No app needed", pill2:"Any link you like", pill3:"iPhone & Android",
+ prodTitle:"Pick your product", prodSub:"Browse the photos from every angle, see how it works, then order on WhatsApp.",
+ off50:"50% OFF", off60:"60% OFF", cur:"EGP",
+ cardName:"NFC Card", cardDesc:"A sleek card with the Lta3arafo face and all your links inside. Any phone held near it opens what you choose in a second.",
+ cardT1:"Facebook, InstaPay payment, Vodafone Cash", cardT2:"Menu, website, blog, LinkedIn or Gmail", cardT3:"For engineers, doctors, business and shop owners, students",
+ kidsName:"Kids NFC Medallion", kidsDesc:"A medallion with a cartoon boy or girl. Anyone who holds a phone near it opens the child's page with the parent's contact.",
+ kidsT1:"Boy or girl picture, your choice", kidsT2:"Call, WhatsApp and SMS in one tap", kidsT3:"Safe… and always in touch",
+ optDeal:"Choose your deal", chipReg:"Regular price", chipFriends:"Friends: 3 for 2", chipStudent:"Students: EGP 200",
+ optPic:"Picture", boy:"Boy", girl:"Girl", qty:"Quantity",
+ total:"Total", save:"You save", payNote:"pay for {n} only", piecesNote:"{q} pieces",
+ orderWa:"Order on WhatsApp", fine:"WhatsApp opens with a ready message. We don't ask for any personal details here.",
+ howTitle:"How does it work?", howSub:"Three steps, no app.",
+ s1t:"Hold your phone near", s1p:"Bring the back of your phone close to the card or medallion.",
+ s2t:"The page opens by itself", s2p:"No sign-up, no download. The link opens in a second.",
+ s3t:"Tap what you need", s3p:"Facebook, payment, menu, website, call or WhatsApp, all on one page.",
+ phones:"Works with iPhone XS and newer, and Android phones with NFC (turn it on in Settings).",
+ whyTitle:"Why Lta3arafo?",
+ f1t:"Any link you like", f1p:"Your Facebook page, an InstaPay payment link, a Vodafone Cash number, your menu, website or blog.",
+ f2t:"No paper to lose", f2p:"One card instead of a stack of paper cards. Anyone who taps it reaches everything.",
+ f3t:"Peace of mind for kids", f3p:"A medallion with your child's picture. If someone needs to reach you, they tap and call.",
+ aud:["Engineers","Doctors","Business owners","Shops & restaurants","Students","Parents"],
+ faqTitle:"Common questions",
+ q1:"Do I need an app?", a1:"No. Most modern phones open the link as soon as they are held near it.",
+ q2:"Which phones work?", a2:"iPhone XS and newer, and Android phones with NFC. On Android, turn NFC on in Settings.",
+ q3:"Can I add any link?", a3:"Yes. Facebook, InstaPay payment, Vodafone Cash, a menu, a website, a blog, LinkedIn, Gmail and more.",
+ q4:"How do I order?", a4:"Pick the product and the deal, then tap “Order on WhatsApp”. Your order reaches us on WhatsApp and we finish the details there.",
+ finalT:"Ready to get known with one tap?", foot:"NFC cards & medallions",
+ prev:"Previous", next:"Next", minus:"Decrease", plus:"Increase", langBtn:"عربي", langAria:"العربية",
+ hello:"Hello Lta3arafo, I have a question about the cards and medallions.",
+ m_hi:"Hello Lta3arafo 👋\nI'd like to order:", m_prod:"Product", m_qty:"Quantity", m_deal:"Deal", m_total:"Total", m_pic:"Picture",
+ m_card:"NFC Card", m_kids:"Kids NFC Medallion", m_none:"Regular price", m_friends:"Friends deal (3 for 2)", m_student:"Students deal (EGP 200 per card)",
+ alt:{cardFront:"Face of a Lta3arafo card", cardBack:"Back of the card with the NFC mark", cardTap:"Holding a phone near the card", cardLinks:"Links page on a phone",
+      kidBoy:"Boy medallion", kidGirl:"Girl medallion", kidTap:"Holding a phone near the medallion", kidPage:"Child page on a phone", hero:"Lta3arafo card and medallions"},
+ sv:{name:"Eng. Ahmed Seif", job:"Consulting Engineer", fb:"Facebook", pay:"InstaPay payment", vc:"Vodafone Cash", menu:"Menu", li:"LinkedIn", web:"My website",
+     kid1:"Mohamed", kid2:"Mariam", safe:"Safe… and always in touch", call:"Call", wa:"WhatsApp", sms:"SMS"}
+}};
+
+let lang="ar";
+try{const s=localStorage.getItem("lta-lang"); if(s==="en"||s==="ar") lang=s;}catch(e){}
+const t=k=>D[lang][k];
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const fmt=n=>n.toLocaleString("en-US");
+const FONT="IBM Plex Sans Arabic, Cairo, sans-serif";
+
+/* ---------- SVG building blocks ---------- */
+let uid=0;
+function nfcMark(cx,cy,s,color,sw){return `<g transform="translate(${cx} ${cy}) scale(${s}) translate(-12 -12)" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round"><path d="M6 8c2.2 2.6 2.2 5.4 0 8"/><path d="M10 5.5c3.6 3.8 3.6 9.2 0 13"/><path d="M14 3c5 5 5 13 0 18"/></g>`}
+function shadow(cx,cy,rx,ry,op){return `<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="#000" opacity="${op||.5}" filter="url(#blur)"/>`}
+function scene(inner,label){return `<svg viewBox="0 0 600 600" direction="ltr" role="img" aria-label="${label}"><rect width="600" height="600" fill="url(#bgGrad)"/><rect width="600" height="600" fill="url(#keyLight)"/><g filter="url(#blurL)"><circle cx="80" cy="110" r="46" fill="#5ad8ff" opacity=".28"/><circle cx="520" cy="70" r="60" fill="#2f8bff" opacity=".3"/><circle cx="560" cy="300" r="34" fill="#9ad8ff" opacity=".18"/><circle cx="40" cy="380" r="40" fill="#2f8bff" opacity=".22"/></g><rect width="600" height="600" fill="url(#vig)"/>${inner}</svg>`}
+function icoBox(name,x,y,size,bg){const sc=size*.56/16, o=(size-16*sc)/2;return `<rect x="${x}" y="${y}" width="${size}" height="${size}" rx="${size*.28}" fill="${bg}"/><g transform="translate(${x+o} ${y+o}) scale(${sc})" fill="#fff">${ICO[name]}</g>`}
+
+function card(cx,cy,w,h,rot,face){
+  const id="cc"+(++uid), r=w*.06; let body;
+  if(face==="front"){
+    body=`<rect x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" rx="${r}" fill="url(#cardGrad)"/>
+    <g clip-path="url(#${id})">
+      <ellipse cx="${w*.02}" cy="${h*.1}" rx="${w*.64}" ry="${h*.3}" transform="rotate(-16 0 0)" fill="none" stroke="#2f8bff" stroke-opacity=".25" stroke-width="${h*.1}"/>
+      <ellipse cx="${w*.02}" cy="${h*.1}" rx="${w*.64}" ry="${h*.3}" transform="rotate(-16 0 0)" fill="none" stroke="url(#swirl)" stroke-width="${h*.04}"/>
+      <path d="M ${-w/2} ${-h/2} L ${w*.12} ${-h/2} L ${-w*.22} ${h/2} L ${-w/2} ${h/2} Z" fill="#fff" opacity=".07"/>
+    </g>
+    ${nfcMark(0,-h*.17,h*.3/24,"#5ad8ff",2.3)}
+    <text x="0" y="${h*.2+3}" text-anchor="middle" font-family="${FONT}" font-weight="900" font-size="${h*.21}" fill="#000" opacity=".45">${lang==="ar"?"لتعارفوا":"Lta3arafo"}</text><text x="0" y="${h*.2}" text-anchor="middle" font-family="${FONT}" font-weight="900" font-size="${h*.21}" fill="#fff">${lang==="ar"?"لتعارفوا":"Lta3arafo"}</text>
+    <rect x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" rx="${r}" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="1.5"/>`;
+  }else{
+    body=`<rect x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" rx="${r}" fill="url(#silver)"/>
+    <g clip-path="url(#${id})"><path d="M ${-w/2} ${-h/2} L ${w*.1} ${-h/2} L ${-w*.3} ${h/2} L ${-w/2} ${h/2} Z" fill="#fff" opacity=".5"/></g>
+    <circle cx="0" cy="0" r="${h*.3}" fill="none" stroke="#0a2468" stroke-opacity=".18" stroke-width="2"/>
+    ${nfcMark(0,0,h*.36/24,"#0a2468",2.2)}
+    <rect x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" rx="${r}" fill="none" stroke="#fff" stroke-width="2"/>`;
+  }
+  const edge=face==="front"?"#020a1f":"#9aa6c0";
+  return `<g transform="translate(${cx} ${cy}) rotate(${rot})"><defs><clipPath id="${id}"><rect x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" rx="${r}"/></clipPath></defs>${shadow(0,h/2+22,w*.42,13,.55)}<rect x="${-w/2}" y="${-h/2+7}" width="${w}" height="${h}" rx="${r}" fill="${edge}"/>${body}<g clip-path="url(#${id})"><rect x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" fill="url(#gloss)"/><rect x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" filter="url(#grain)" opacity=".09"/></g></g>`;
+}
+
+function medal(cx,cy,r,gender,rot,face){
+  const metal=gender==="girl"?"url(#metalPink)":"url(#metalBlue)", ink=gender==="girl"?"#b53a73":"#1f4fae";
+  let inner;
+  if(face==="back"){
+    inner=`<circle r="${r*.84}" fill="${ink}" opacity=".12"/><circle r="${r*.84}" fill="none" stroke="${ink}" stroke-opacity=".45" stroke-width="2"/>${nfcMark(0,0,r*1.1/24,ink,2.3)}`;
+  }else{
+    inner=`<circle r="${r*.86}" fill="#dcebff"/><image href="${AV[gender]}" x="${-r*.86}" y="${-r*.86}" width="${r*1.72}" height="${r*1.72}" clip-path="url(#circ)"/><circle r="${r*.86}" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="3"/>`;
+  }
+  return `<g transform="translate(${cx} ${cy}) rotate(${rot})">${shadow(0,r+26,r*.8,12,.5)}
+  <ellipse cx="0" cy="${-r-44}" rx="15" ry="26" fill="none" stroke="#c9d4ea" stroke-width="5"/><circle cx="0" cy="${-r-14}" r="19" fill="none" stroke="${metal}" stroke-width="9"/>
+  <circle r="${r}" fill="${metal}"/><circle r="${r*.93}" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="2"/>
+  ${inner}
+  <circle r="${r}" fill="url(#sheenR)"/><circle r="${r*.86}" fill="none" stroke="#000" stroke-opacity=".28" stroke-width="5"/>
+  <ellipse cx="${-r*.28}" cy="${-r*.5}" rx="${r*.46}" ry="${r*.17}" transform="rotate(-35 ${-r*.28} ${-r*.5})" fill="#fff" opacity=".4"/></g>`;
+}
+
+function phone(cx,cy,w,h,rot,content,light,sc){
+  const sw=w-14, sh=h-14;
+  return `<g transform="translate(${cx} ${cy}) rotate(${rot}) scale(${sc||1})">${shadow(0,h/2+16,w*.45,12,.55)}
+  <rect x="${w/2-1}" y="${-h*.2}" width="4" height="${h*.12}" rx="2" fill="#5a6f9c"/><rect x="${-w/2-3}" y="${-h*.28}" width="4" height="${h*.08}" rx="2" fill="#5a6f9c"/><rect x="${-w/2-3}" y="${-h*.17}" width="4" height="${h*.1}" rx="2" fill="#5a6f9c"/>
+  <rect x="${-w/2}" y="${-h/2}" width="${w}" height="${h}" rx="${w*.16}" fill="#0a0f1d" stroke="url(#phoneEdge)" stroke-width="3.5"/>
+  <rect x="${-sw/2}" y="${-sh/2}" width="${sw}" height="${sh}" rx="${w*.12}" fill="url(#${light?"screenLight":"screen"})"/>
+  <g transform="translate(0 ${-sh/2})">${content}</g>
+  <path d="M ${-sw/2} ${-sh/2} L ${sw*.12} ${-sh/2} L ${-sw*.3} ${sh/2} L ${-sw/2} ${sh/2} Z" fill="#fff" opacity=".06"/>
+  <rect x="${-w*.14}" y="${-sh/2+8}" width="${w*.28}" height="9" rx="4.5" fill="#0a0f1d"/></g>`;
+}
+
+function waves(cx,cy,rot,n){let s="";for(let i=1;i<=3;i++){const r=26+i*26;s+=`<path class="wv wv${i}" d="M ${-r*.8} ${-r*.6} A ${r} ${r} 0 0 1 ${r*.8} ${-r*.6}" fill="none" stroke="#5ad8ff" stroke-width="7" stroke-linecap="round" transform="translate(${cx} ${cy}) rotate(${rot})"/>`}return s}
+
+function linksScreen(w){
+  const S=D[lang].sv, rtl=lang==="ar", sw=w-14, x0=-sw/2+10, bw=sw-20;
+  let s=`<circle cx="0" cy="62" r="26" fill="#2f8bff"/><text x="0" y="71" text-anchor="middle" font-family="${FONT}" font-weight="900" font-size="26" fill="#fff">${rtl?"أ":"A"}</text>
+  <text x="0" y="112" text-anchor="middle" font-family="${FONT}" font-weight="700" font-size="14.5" fill="#fff">${S.name}</text>
+  <text x="0" y="129" text-anchor="middle" font-family="${FONT}" font-size="11" fill="#a9bbdf">${S.job}</text>`;
+  const rows=[["facebook",S.fb,"#1877f2"],["whatsapp","WhatsApp","#25d366"],["credit-card-2-front-fill",S.pay,"#7c3aed"],["wallet2",S.vc,"#e60000"],["cup-hot-fill",S.menu,"#f59e0b"],["linkedin",S.li,"#0a66c2"]];
+  rows.forEach((r,i)=>{const y=148+i*42;
+    s+=`<rect x="${x0}" y="${y}" width="${bw}" height="36" rx="12" fill="#fff" fill-opacity=".09"/>`;
+    const ix=rtl?x0+bw-32:x0+4;
+    s+=icoBox(r[0],ix,y+4,28,r[2]);
+    s+=`<text x="${rtl?x0+bw-40:x0+40}" y="${y+23}" text-anchor="${rtl?"end":"start"}" font-family="${FONT}" font-weight="500" font-size="13" fill="#fff">${r[1]}</text>`;
+  });
+  return s;
+}
+function kidScreen(w,gender,name){
+  const S=D[lang].sv, sw=w-14, x0=-sw/2+10, bw=sw-20;
+  let s=`<circle cx="0" cy="84" r="46" fill="${gender==="girl"?"#ef76ae":"#2f8bff"}"/><image href="${AV[gender]}" x="-42" y="42" width="84" height="84" clip-path="url(#circ)"/>
+  <text x="0" y="158" text-anchor="middle" font-family="${FONT}" font-weight="900" font-size="22" fill="#0b1f4d">${name}</text>
+  <text x="0" y="178" text-anchor="middle" font-family="${FONT}" font-size="10.5" fill="#4a5f8a">${S.safe}</text>`;
+  [["telephone-fill",S.call,"#2f8bff"],["whatsapp",S.wa,"#25d366"],["chat-dots-fill",S.sms,"#f59e0b"]].forEach((r,i)=>{const y=196+i*46;
+    s+=`<rect x="${x0}" y="${y}" width="${bw}" height="38" rx="13" fill="${r[2]}"/><g transform="translate(${-bw/2+(lang==="ar"?bw-30:12)} ${y+9}) scale(1.25)" fill="#fff">${ICO[r[0]]}</g><text x="${lang==="ar"?x0+bw-40:x0+40}" y="${y+25}" text-anchor="${lang==="ar"?"end":"start"}" font-family="${FONT}" font-weight="700" font-size="14" fill="#fff">${r[1]}</text>`});
+  return s;
+}
+
+/* ---------- slides ---------- */
+const A=()=>D[lang].alt;
+const SL={
+ card:[
+  ()=>scene(card(300,300,420,264,-9,"front"),A().cardFront),
+  ()=>scene(card(300,300,420,264,7,"back"),A().cardBack),
+  ()=>scene(card(255,430,330,208,-5,"front")+waves(345,360,18)+phone(385,215,236,470,16,linksScreen(236),false,.82),A().cardTap),
+  ()=>scene(phone(300,300,236,470,0,linksScreen(236)),A().cardLinks)
+ ],
+ kids:[
+  ()=>scene(medal(300,330,150,"boy",-6,"front"),A().kidBoy),
+  ()=>scene(medal(300,330,150,"girl",6,"front"),A().kidGirl),
+  ()=>scene(medal(215,440,105,"boy",-6,"back")+waves(300,380,20)+phone(402,235,196,400,18,kidScreen(196,"boy",D[lang].sv.kid1),true,.96),A().kidTap),
+  ()=>scene(phone(200,318,196,400,-5,kidScreen(196,"girl",D[lang].sv.kid2),true)+phone(404,296,196,400,5,kidScreen(196,"boy",D[lang].sv.kid1),true),A().kidPage)
+ ]
+};
+const heroSvg=()=>scene(card(270,270,380,240,-10,"front")+medal(455,445,82,"boy",8,"front")+medal(140,455,68,"girl",-8,"front")+nfcMark(500,120,2.2,"#5ad8ff",1.6),A().hero);
+
+/* ---------- galleries ---------- */
+const GI={card:0,kids:0};
+function renderGal(k){
+  const g=$("#gal-"+k), slides=SL[k];
+  $(".stage",g).innerHTML=slides[GI[k]]();
+  $(".thumbs",g).innerHTML=slides.map((f,i)=>`<button type="button" class="th" data-i="${i}" aria-label="${i+1}/${slides.length}" ${i===GI[k]?'aria-current="true"':""}>${f()}</button>`).join("");
+}
+function go(k,i){const n=SL[k].length;GI[k]=(i+n)%n;renderGal(k);}
+["card","kids"].forEach(k=>{
+  const g=$("#gal-"+k);
+  $(".prev",g).onclick=()=>go(k,GI[k]-1);
+  $(".next",g).onclick=()=>go(k,GI[k]+1);
+  g.addEventListener("click",e=>{const b=e.target.closest(".th");if(b)go(k,+b.dataset.i)});
+  let x0=null;const st=$(".stage",g);
+  st.addEventListener("pointerdown",e=>{x0=e.clientX});
+  st.addEventListener("pointerup",e=>{if(x0===null)return;const dx=e.clientX-x0;x0=null;if(Math.abs(dx)>40){const rtl=lang==="ar";go(k,GI[k]+((dx<0)!==rtl?1:-1))}});
+});
+
+/* ---------- ordering ---------- */
+const ST={card:{offer:"none",qty:1},kids:{offer:"none",qty:1,gender:"boy"}};
+function calc(k){
+  const s=ST[k], p=PRICE[k];
+  const unit=s.offer==="student"?STUDENT:p.p;
+  const paid=s.offer==="friends"?s.qty-Math.floor(s.qty/3):s.qty;
+  return {unit,paid,total:unit*paid,oldTotal:p.old*s.qty};
+}
+function waLink(text){return `https://wa.me/${WA_NUMBER?WA_NUMBER:""}?text=${encodeURIComponent(text)}`}
+function update(k){
+  const s=ST[k], c=calc(k), cur=t("cur");
+  $("#q-"+k).textContent=s.qty;
+  $("#now-"+k).textContent=fmt(s.offer==="student"?STUDENT:PRICE[k].p);
+  $$(`.chips[data-k="${k}"]`).forEach(ch=>$$(".chip",ch).forEach(b=>b.setAttribute("aria-pressed",String(ST[k][ch.dataset.g]===b.dataset.v))));
+  const saved=c.oldTotal-c.total;
+  const note=s.offer==="friends"?`${t("piecesNote").replace("{q}",s.qty)} · ${t("payNote").replace("{n}",s.qty-Math.floor(s.qty/3))}`:"";
+  $("#sum-"+k).innerHTML=`<div class="r"><span>${t("total")}</span><span class="tot">${fmt(c.total)} ${cur}</span></div>${note?`<div class="small">${note}</div>`:""}<div class="small">${t("save")} <span class="save">${fmt(saved)} ${cur}</span> <s>${fmt(c.oldTotal)}</s></div>`;
+  const lines=[t("m_hi"),`• ${t("m_prod")}: ${t(k==="card"?"m_card":"m_kids")}`];
+  if(k==="kids")lines.push(`• ${t("m_pic")}: ${t(s.gender==="boy"?"boy":"girl")}`);
+  lines.push(`• ${t("m_qty")}: ${s.qty}`,`• ${t("m_deal")}: ${t("m_"+s.offer)}`,`• ${t("m_total")}: ${fmt(c.total)} ${cur}`);
+  $("#wa-"+k).href=waLink(lines.join("\n"));
+}
+function setQty(k,q){const step=ST[k].offer==="friends"?3:1;ST[k].qty=Math.max(step,Math.min(99,q));update(k)}
+$$(".chips").forEach(ch=>ch.addEventListener("click",e=>{
+  const b=e.target.closest(".chip");if(!b)return;const k=ch.dataset.k,g=ch.dataset.g;
+  ST[k][g]=b.dataset.v;
+  if(g==="offer")ST[k].qty=b.dataset.v==="friends"?3:1;
+  if(g==="gender"){GI.kids=ST.kids.gender==="boy"?0:1;renderGal("kids")}
+  update(k);
+}));
+$$(".step").forEach(st=>st.addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;const k=st.dataset.k,step=ST[k].offer==="friends"?3:1;
+  setQty(k,ST[k].qty+(+b.dataset.d)*step);
+}));
+$$("[data-offer]").forEach(b=>b.addEventListener("click",()=>{
+  ST.card.offer=b.dataset.offer;ST.card.qty=b.dataset.offer==="friends"?3:1;update("card");
+  $("#p-card").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"});
+}));
+
+/* ---------- language ---------- */
+function applyLang(){
+  const de=document.documentElement;de.lang=lang;de.dir=lang==="ar"?"rtl":"ltr";
+  document.title=lang==="ar"?"لتعارفوا NFC":"Lta3arafo NFC";
+  $$("[data-i]").forEach(el=>{const v=t(el.dataset.i);if(v!==undefined)el.innerHTML=v});
+  $$("[data-ial]").forEach(el=>el.setAttribute("aria-label",t(el.dataset.ial)));
+  const lb=$("#langBtn");lb.textContent=t("langBtn");lb.setAttribute("aria-label",t("langAria"));
+  $("#aud").innerHTML=t("aud").map(x=>`<span>${x}</span>`).join("");
+  $("#heroArt").innerHTML=heroSvg();
+  renderGal("card");renderGal("kids");update("card");update("kids");
+  const hello=waLink(t("hello"));["waTop","waHero","waFinal","waFoot","waFloat"].forEach(id=>$("#"+id).href=hello);
+  ["fbTop","fbHero","fbFinal","fbFoot"].forEach(id=>$("#"+id).href=FB_URL);
+}
+$("#langBtn").onclick=()=>{lang=lang==="ar"?"en":"ar";try{localStorage.setItem("lta-lang",lang)}catch(e){}applyLang()};
+applyLang();
+</script>
+
+</body></html>
